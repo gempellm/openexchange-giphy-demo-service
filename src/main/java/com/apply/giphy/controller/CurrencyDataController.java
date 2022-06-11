@@ -44,6 +44,11 @@ public class CurrencyDataController {
         Gson gson = new Gson();
         Double previousPrice = gson.fromJson(previousJson, CurrencyData.class).getRates().get(currency);
         Double latestPrice = gson.fromJson(latestJson, CurrencyData.class).getRates().get(currency);
+
+        if (previousPrice == null || latestPrice == null) {
+            return "<h1>Код валюты отсутствует в базе!</h1>";
+        }
+
         String giphyResponse = latestPrice > previousPrice ? giphyUtil.getGifRich(API_KEY) : giphyUtil.getGifBroke(API_KEY);
         JsonObject giphyJson = JsonParser.parseString(giphyResponse).getAsJsonObject();
         String gifLink = giphyJson
